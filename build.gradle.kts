@@ -17,14 +17,14 @@ repositories {
 }
 
 kotlin {
-    jvm {
+    jvm("backend") {
         jvmToolchain(11)
         withJava()
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
     }
-    js(IR) {
+    js("frontend", IR) {
         binaries.executable()
         browser {
             commonWebpackConfig {
@@ -41,15 +41,15 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting {
+        val backendMain by getting {
             dependencies {
                 implementation("io.ktor:ktor-server-netty:2.0.2")
                 implementation("io.ktor:ktor-server-html-builder-jvm:2.0.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
             }
         }
-        val jvmTest by getting
-        val jsMain by getting {
+        val backendTest by getting
+        val frontendMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react:18.2.0-pre.346")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:18.2.0-pre.346")
@@ -57,7 +57,7 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:6.3.0-pre.346")
             }
         }
-        val jsTest by getting
+        val frontendTest by getting
     }
 }
 
@@ -90,10 +90,10 @@ tasks.withType<Detekt>().configureEach {
 
 tasks.register("detektAll") {
     group = "verification"
-    dependsOn += "detektJvmMain"
-    dependsOn += "detektJvmTest"
-    dependsOn += "detektJsMain"
-    dependsOn += "detektJsTest"
+    dependsOn += "detektBackendMain"
+    dependsOn += "detektBackendTest"
+    dependsOn += "detektFrontendMain"
+    dependsOn += "detektFrontendTest"
     dependsOn += "detektMetadataCommonMain"
 }
 
@@ -101,13 +101,12 @@ tasks.buildFatJar {
     dependsOn += "detektAll"
 }
 
-tasks.named<Copy>("jvmProcessResources") {
-    val jsBrowserDistribution = tasks.named("jsBrowserDistribution")
-    from(jsBrowserDistribution)
+tasks.named<Copy>("backendProcessResources") {
+    from(tasks.named("frontendBrowserDistribution"))
 }
 
 tasks.named<JavaExec>("run") {
-    dependsOn(tasks.named<Jar>("jvmJar"))
-    classpath(tasks.named<Jar>("jvmJar"))
+    dependsOn(tasks.named<Jar>("backendJar"))
+    classpath(tasks.named<Jar>("backendJar"))
 }
 
