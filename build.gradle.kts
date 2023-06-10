@@ -3,6 +3,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 plugins {
     kotlin("multiplatform") version "1.8.20"
     id("io.gitlab.arturbosch.detekt") version("1.23.0")
+    id("io.ktor.plugin") version "2.3.1"
     application
 }
 
@@ -72,6 +73,12 @@ detekt {
 
 application {
     mainClass.set("dev.mmauro.privateMediaGallery.server.ServerKt")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("private-media-gallery.jar")
+    }
 }
 
 tasks.withType<Detekt>().configureEach {
