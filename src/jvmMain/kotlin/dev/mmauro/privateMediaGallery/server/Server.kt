@@ -4,8 +4,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.html.respondHtml
-import io.ktor.server.http.content.resources
-import io.ktor.server.http.content.static
+import io.ktor.server.http.content.staticResources
 import io.ktor.server.netty.Netty
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
@@ -38,9 +37,7 @@ fun main() {
             get("/") {
                 call.respondHtml(HttpStatusCode.OK, HTML::index)
             }
-            static("/static") {
-                resources()
-            }
+            staticResources("/static", null)
         }
     }.start(wait = true)
 }
