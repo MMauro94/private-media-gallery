@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform") version "1.8.20"
     id("io.gitlab.arturbosch.detekt") version("1.23.0")
     id("io.ktor.plugin") version "2.3.1"
+    id("io.kotest.multiplatform") version "5.6.2"
     application
 }
 
@@ -33,11 +34,14 @@ kotlin {
             }
         }
     }
+    val kotestVersion = "5.6.2"
     sourceSets {
         val commonMain by getting
         val commonTest by getting {
             dependencies {
-                implementation(kotlin("test"))
+                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                implementation("io.kotest:kotest-framework-engine:$kotestVersion")
+                implementation("io.kotest:kotest-framework-datatest:$kotestVersion")
             }
         }
         val backendMain by getting {
@@ -47,7 +51,11 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
             }
         }
-        val backendTest by getting
+        val backendTest by getting {
+            dependencies {
+                implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+            }
+        }
         val frontendMain by getting {
             dependencies {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react:18.2.0-pre.346")
@@ -56,12 +64,20 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:6.3.0-pre.346")
             }
         }
-        val frontendTest by getting
+        val frontendTest by getting {
+            dependencies {
+                implementation("io.kotest:kotest-framework-engine:$kotestVersion")
+            }
+        }
     }
 }
 
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
+}
+
+tasks.named<Test>("backendTest") {
+    useJUnitPlatform()
 }
 
 detekt {
