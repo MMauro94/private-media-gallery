@@ -88,6 +88,19 @@ tasks.withType<Detekt>().configureEach {
     }
 }
 
+tasks.register("detektAll") {
+    group = "verification"
+    dependsOn += "detektJvmMain"
+    dependsOn += "detektJvmTest"
+    dependsOn += "detektJsMain"
+    dependsOn += "detektJsTest"
+    dependsOn += "detektMetadataCommonMain"
+}
+
+tasks.buildFatJar {
+    dependsOn += "detektAll"
+}
+
 tasks.named<Copy>("jvmProcessResources") {
     val jsBrowserDistribution = tasks.named("jsBrowserDistribution")
     from(jsBrowserDistribution)
@@ -97,3 +110,4 @@ tasks.named<JavaExec>("run") {
     dependsOn(tasks.named<Jar>("jvmJar"))
     classpath(tasks.named<Jar>("jvmJar"))
 }
+
