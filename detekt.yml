@@ -1,0 +1,31 @@
+complexity:
+  CyclomaticComplexMethod:
+    ignoreSingleWhenExpression: true
+
+formatting:
+  ArgumentListWrapping:
+    maxLineLength: 140 # Must also be changed in .editorconfig
+  FunctionSignature:
+    maxLineLength: 140 # Must also be changed in .editorconfig
+  MaximumLineLength:
+    maxLineLength: 140 # Must also be changed in .editorconfig
+  ParameterListWrapping:
+    maxLineLength: 140 # Must also be changed in .editorconfig
+  ImportOrdering:
+    # Must also be changed in .editorconfig
+    layout: "*,java.**,javax.**,kotlin.**,kotlinx.**,^"
+  TrailingCommaOnCallSite:
+    active: true
+  TrailingCommaOnDeclarationSite:
+    active: true
+
+style:
+  MaxLineLength:  # Duplicate of ktlint MaximumLineLength
+    active: false
+  ForbiddenComment:
+    active: false # TODO (how ironic): re-enable once we're production ready
+  ReturnCount:
+    # There are quite a bit of legitimate cases where the default (2) is too restrictive
+    max: 5
+  WildcardImport: # Duplicate of ktlint NoWildcardImports
+    active: false

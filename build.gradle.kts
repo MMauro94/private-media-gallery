@@ -1,5 +1,8 @@
+import io.gitlab.arturbosch.detekt.Detekt
+
 plugins {
     kotlin("multiplatform") version "1.8.20"
+    id("io.gitlab.arturbosch.detekt") version("1.23.0")
     application
 }
 
@@ -57,8 +60,25 @@ kotlin {
     }
 }
 
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
+}
+
+detekt {
+    toolVersion = "1.23.0"
+    config.setFrom(file("detekt.yml"))
+    buildUponDefaultConfig = true
+}
+
 application {
-    mainClass.set("dev.mmauro.application.ServerKt")
+    mainClass.set("dev.mmauro.privateMediaGallery.server.ServerKt")
+}
+
+tasks.withType<Detekt>().configureEach {
+    reports {
+        html.required.set(true)
+        md.required.set(true)
+    }
 }
 
 tasks.named<Copy>("jvmProcessResources") {
