@@ -36,7 +36,11 @@ kotlin {
     }
     val kotestVersion = "5.6.2"
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("dev.whyoleg.cryptography:cryptography-core:0.1.0")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation("io.kotest:kotest-assertions-core:$kotestVersion")
@@ -62,6 +66,8 @@ kotlin {
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:18.2.0-pre.346")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion:11.9.3-pre.346")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:6.3.0-pre.346")
+
+                implementation("dev.whyoleg.cryptography:cryptography-webcrypto:0.1.0")
             }
         }
         val frontendTest by getting {
