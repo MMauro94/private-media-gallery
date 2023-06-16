@@ -1,0 +1,8 @@
+CREATE TABLE Vault (
+    uid TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    owner TEXT NOT NULL REFERENCES User(uid)
+);
+
+insert:
+INSERT INTO Vault VALUES ?;

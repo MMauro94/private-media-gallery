@@ -1,0 +1,19 @@
+CREATE TABLE User(
+    uid TEXT NOT NULL PRIMARY KEY,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
+);
+
+insert:
+INSERT INTO User VALUES ?;
+
+-- Selects all vaults the user has access to. This includes:
+-- 1. All owned vaults
+-- 2. All vaults that have are in the UserVaults table
+-- Each vault will only appear once
+vaults:
+SELECT v.*
+FROM Vault v
+LEFT OUTER JOIN UserVault uv ON v.uid = uv.vault AND uv.user = :user
+WHERE v.owner = :user OR uv.vault IS NOT NULL
+ORDER BY uv.sort;

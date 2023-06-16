@@ -1,0 +1,16 @@
+CREATE TABLE UserVault(
+    vault TEXT NOT NULL REFERENCES Vault(uid),
+    user TEXT NOT NULL REFERENCES User(uid),
+    sort INTEGER NOT NULL,
+    UNIQUE(vault, user)
+);
+
+insert:
+INSERT INTO UserVault(vault, user, sort) VALUES (
+    :vault,
+    :user,
+    (SELECT COALESCE(MAX(sort) + 1, 0) FROM UserVault WHERE user = :user)
+);
+
+selectAll:
+SELECT * FROM UserVault;
