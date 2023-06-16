@@ -5,6 +5,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version ("1.23.0")
     id("io.ktor.plugin") version "2.3.1"
     id("io.kotest.multiplatform") version "5.6.2"
+    id("app.cash.sqldelight") version "2.0.0-rc01"
     application
 }
 
@@ -14,6 +15,14 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven")
+}
+
+sqldelight {
+    databases {
+        create("ServerDatabase") {
+            packageName.set("dev.mmauro.privateMediaGallery.server.db")
+        }
+    }
 }
 
 kotlin {
@@ -53,6 +62,7 @@ kotlin {
                 implementation("io.ktor:ktor-server-netty:2.0.2")
                 implementation("io.ktor:ktor-server-html-builder-jvm:2.0.2")
                 implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.2")
+                implementation("app.cash.sqldelight:sqlite-driver:2.0.0-rc01")
             }
         }
         val backendTest by getting {
@@ -107,6 +117,8 @@ tasks.withType<Detekt>().configureEach {
         html.required.set(true)
         md.required.set(true)
     }
+    val generatedDir = File(project.projectDir, "build/generated")
+    exclude { it.file.startsWith(generatedDir) }
 }
 
 tasks.register("detektAll") {
@@ -130,4 +142,3 @@ tasks.named<JavaExec>("run") {
     dependsOn(tasks.named<Jar>("backendJar"))
     classpath(tasks.named<Jar>("backendJar"))
 }
-
