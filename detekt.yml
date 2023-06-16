@@ -20,6 +20,10 @@ formatting:
     active: true
 
 style:
+  MagicNumber:
+    excludes:
+      - '**/*Test/**'
+
   MaxLineLength:  # Duplicate of ktlint MaximumLineLength
     active: false
   ForbiddenComment:
