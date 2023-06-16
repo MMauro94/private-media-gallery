@@ -2,7 +2,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
     kotlin("multiplatform") version "1.8.20"
-    id("io.gitlab.arturbosch.detekt") version("1.23.0")
+    id("io.gitlab.arturbosch.detekt") version ("1.23.0")
     id("io.ktor.plugin") version "2.3.1"
     id("io.kotest.multiplatform") version "5.6.2"
     application
