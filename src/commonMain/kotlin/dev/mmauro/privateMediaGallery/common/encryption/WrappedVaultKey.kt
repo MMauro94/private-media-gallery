@@ -14,6 +14,7 @@ data class WrappedVaultKey(val key: Nothing) {
     /**
      * Unwraps this [WrappedVaultKey] using the given [wrappingKey] and returns the corresponding [VaultKey].
      */
+    @Suppress("UNUSED_PARAMETER")
     suspend fun unwrap(wrappingKey: UserKey): VaultKey {
         TODO(
             """

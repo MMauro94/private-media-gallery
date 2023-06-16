@@ -18,6 +18,7 @@ data class VaultKey(val key: AES.GCM.Key) {
     /**
      * Wraps this [VaultKey] using the provided user [wrappingKey].
      */
+    @Suppress("UNUSED_PARAMETER")
     fun wrap(wrappingKey: UserKey): WrappedVaultKey {
         TODO(
             """
