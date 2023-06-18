@@ -16,6 +16,8 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          generate-job-summary: false
 
       - name: Execute Detekt task
         run: ./gradlew detektAll
@@ -25,3 +27,26 @@ jobs:
         with:
           name: Detekt report
           path: build/reports/detekt/
+
+      - name: Add report to action summary
+        run: |
+          detekt_report_spoiler() {
+            echo "<details>"
+            echo "  <summary>$1</summary>"
+            echo ""
+            cat "$2"
+            echo "</details>"
+            echo ""
+          }
+          
+          echo "# Common" >> $GITHUB_STEP_SUMMARY
+          detekt_report_spoiler "Main" "build/reports/detekt/metadataCommonMain.md" >> $GITHUB_STEP_SUMMARY
+          
+          echo "# Backend" >> $GITHUB_STEP_SUMMARY
+          detekt_report_spoiler "Main" "build/reports/detekt/backendMain.md" >> $GITHUB_STEP_SUMMARY
+          detekt_report_spoiler "Test" "build/reports/detekt/backendTest.md" >> $GITHUB_STEP_SUMMARY
+          
+          echo "# Frontend" >> $GITHUB_STEP_SUMMARY
+          detekt_report_spoiler "Main" "build/reports/detekt/frontendMain.md" >> $GITHUB_STEP_SUMMARY
+          detekt_report_spoiler "Test" "build/reports/detekt/frontendTest.md" >> $GITHUB_STEP_SUMMARY
+          
