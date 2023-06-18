@@ -1,3 +1,4 @@
+import app.cash.sqldelight.core.decapitalize
 import io.gitlab.arturbosch.detekt.Detekt
 
 plugins {
@@ -115,9 +116,14 @@ ktor {
 }
 
 tasks.withType<Detekt>().configureEach {
+    val reportName = this.name.removePrefix("detekt").decapitalize()
     reports {
         html.required.set(true)
         md.required.set(true)
+
+        for (report in listOf(html, md, sarif, txt, xml)) {
+            report.outputLocation.set(File(project.reporting.baseDir, "detekt/$reportName.${report.type.extension}"))
+        }
     }
     val generatedDir = File(project.projectDir, "build/generated")
     exclude { it.file.startsWith(generatedDir) }
